@@ -38,7 +38,7 @@
 
 ### 环境要求
 
-> MySQL
+> MySQL 或 Postgres
 
 ## 下载
 
