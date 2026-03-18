@@ -66,7 +66,7 @@
         </el-col>
         <el-col :span="6" style="text-align: right;">
           <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin">新增</el-button>
-          <el-button type="info" @click="refresh">刷新</el-button>
+          <el-button type="primary" @click="refresh">刷新</el-button>
         </el-col>
       </el-row>
     <el-table

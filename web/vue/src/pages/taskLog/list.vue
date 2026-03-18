@@ -7,7 +7,7 @@
           <el-input v-model.trim="searchParams.task_id"></el-input>
         </el-form-item>
         <el-form-item label="执行方式">
-          <el-select v-model.trim="searchParams.protocol" placeholder="执行方式">
+          <el-select v-model.trim="searchParams.protocol" placeholder="执行方式" class="compact-select">
             <el-option label="全部" value=""></el-option>
             <el-option
             v-for="item in protocolList"
@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model.trim="searchParams.status">
+          <el-select v-model.trim="searchParams.status" class="compact-select">
             <el-option label="全部" value=""></el-option>
             <el-option
               v-for="item in statusList"
@@ -47,7 +47,7 @@
         </el-col>
         <el-col :span="6" style="text-align: right;">
           <el-button type="danger" v-if="this.$store.getters.user.isAdmin" @click="clearLog">清空日志</el-button>
-          <el-button type="info" @click="refresh">刷新</el-button>
+          <el-button type="primary" @click="refresh">刷新</el-button>
         </el-col>
       </el-row>
       <el-table
@@ -268,5 +268,8 @@ export default {
     padding:10px;
     background-color: #4C4C4C;
     color: white;
+  }
+  .compact-select {
+    width: 90px;
   }
 </style>

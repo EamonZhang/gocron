@@ -14,24 +14,24 @@
           </el-form-item>
         </el-row>
       </el-form>
-      <el-row type="flex" justify="end">
-        <el-col :span="2">
-          <el-button type="primary" v-if="this.$store.getters.user.isAdmin"  @click="toEdit(null)">新增</el-button>
+      <el-row type="flex" justify="space-between" style="margin-top: 20px;">
+        <el-col :span="18">
+          <el-pagination
+            background
+            layout="prev, pager, next, sizes, total"
+            :total="hostTotal"
+            :page-size="20"
+            @size-change="changePageSize"
+            @current-change="changePage"
+            @prev-click="changePage"
+            @next-click="changePage">
+          </el-pagination>
         </el-col>
-        <el-col :span="2">
-          <el-button type="info" @click="refresh">刷新</el-button>
+        <el-col :span="6" style="text-align: right;">
+          <el-button type="primary" v-if="this.$store.getters.user.isAdmin"  @click="toEdit(null)">新增</el-button>
+          <el-button type="primary" @click="refresh">刷新</el-button>
         </el-col>
       </el-row>
-      <el-pagination
-        background
-        layout="prev, pager, next, sizes, total"
-        :total="hostTotal"
-        :page-size="20"
-        @size-change="changePageSize"
-        @current-change="changePage"
-        @prev-click="changePage"
-        @next-click="changePage">
-      </el-pagination>
       <el-table
         :data="hosts"
         tooltip-effect="dark"
