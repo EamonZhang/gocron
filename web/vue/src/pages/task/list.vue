@@ -2,8 +2,8 @@
 <el-container>
   <task-sidebar></task-sidebar>
   <el-main>
-    <el-form :inline="true" >
-      <el-row>
+    <el-form :inline="true" class="search-form">
+      <el-row class="search-row">
         <el-form-item label="任务ID">
           <el-input v-model.trim="searchParams.id"></el-input>
         </el-form-item>
@@ -13,21 +13,8 @@
         <el-form-item label="标签">
           <el-input v-model.trim="searchParams.tag"></el-input>
         </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item label="执行方式">
-          <el-select v-model.trim="searchParams.protocol">
-            <el-option label="全部" value=""></el-option>
-            <el-option
-              v-for="item in protocolList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="任务节点">
-          <el-select v-model.trim="searchParams.host_id">
+          <el-select v-model.trim="searchParams.host_id" style="min-width: 120px;">
             <el-option label="全部" value=""></el-option>
             <el-option
               v-for="item in hosts"
@@ -37,8 +24,19 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="执行方式">
+          <el-select v-model.trim="searchParams.protocol" class="compact-select">
+            <el-option label="全部" value=""></el-option>
+            <el-option
+              v-for="item in protocolList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model.trim="searchParams.status">
+          <el-select v-model.trim="searchParams.status" class="compact-select">
             <el-option label="全部" value=""></el-option>
             <el-option
               v-for="item in statusList"
@@ -52,25 +50,25 @@
           <el-button type="primary" @click="search()">搜索</el-button>
         </el-form-item>
       </el-row>
-    </el-form>
-    <el-row type="flex" justify="end">
-      <el-col :span="2">
-        <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin">新增</el-button>
-      </el-col>
-      <el-col :span="2">
-        <el-button type="info" @click="refresh">刷新</el-button>
-      </el-col>
-    </el-row>
-    <el-pagination
-      background
-      layout="prev, pager, next, sizes, total"
-      :total="taskTotal"
-      :page-size="20"
-      @size-change="changePageSize"
-      @current-change="changePage"
-      @prev-click="changePage"
-      @next-click="changePage">
-    </el-pagination>
+      </el-form>
+      <el-row type="flex" justify="space-between">
+        <el-col :span="18">
+          <el-pagination
+            background
+            layout="prev, pager, next, sizes, total"
+            :total="taskTotal"
+            :page-size="20"
+            @size-change="changePageSize"
+            @current-change="changePage"
+            @prev-click="changePage"
+            @next-click="changePage">
+          </el-pagination>
+        </el-col>
+        <el-col :span="6" style="text-align: right;">
+          <el-button type="primary" @click="toEdit(null)" v-if="this.$store.getters.user.isAdmin">新增</el-button>
+          <el-button type="info" @click="refresh">刷新</el-button>
+        </el-col>
+      </el-row>
     <el-table
       :data="tasks"
       tooltip-effect="dark"
@@ -169,8 +167,8 @@
       <el-table-column label="操作" width="220" v-if="this.isAdmin">
         <template slot-scope="scope">
           <el-row>
-            <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>
             <el-button type="success" @click="runTask(scope.row)">手动执行</el-button>
+            <el-button type="primary" @click="toEdit(scope.row)">编辑</el-button>
           </el-row>
           <br>
           <el-row>
@@ -344,5 +342,24 @@ export default {
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+  .search-form {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .search-row {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .search-row .el-form-item {
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .search-row .el-form-item__content {
+    min-width: 100px;
+  }
+  .compact-select {
+    width: 90px;
   }
 </style>

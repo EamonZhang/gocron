@@ -60,97 +60,18 @@ _testmain.go
 *.launch
 
 log
-data
 conf
-profile/*
-
-# Go-specific additions
-/go
-/pkg/
-/coverage.out
-/cover.out
-/cgo_tests
-/gox_output/
-/bindata.go
-/fields.go
-
-# Coverage
-*.coverprofile
-
-# Vim swap files and undo files
-.*.swp
-.*.un~
-
-# Other editors temporary/swap files
-*#
-
-# Git files
-*.orig
-*.rej
-*.bak
-
-# Local configuration and credentials
-config.local
-*.local
-secrets.*
-credentials.json
-token.json
-.tokens
-.envrc
-
-# Build artifacts
-/_build/
-artifacts/
-
-# Go project files
-*.mod
-*.sum
-
-# Output of the go coverage tool
-coverage.*
-
-# Go binaries (additional)
-*.exe
-*.dll
-*.so
-*.dylib
-
-# GOPATH related
-/bin/
-/pkg/
-
-# Web frontend artifacts
-/node_modules/
-/bower_components/
-/coverage/
-/npm-debug.log*
-.yarn-integrity
-.yarn/
-.npm/
-
-/gocron
-/gocron-node
-/bin
-/web/public/static
-/web/public/index.html
-/gocron-package
-/gocron-node-package
+bin/
+web/public/
+web/vue/docs/
+gocron-package
+gocron-node-package
 
 # Auto-generated statik files
 internal/statik/statik.go
 
-# Go project modules and dependencies
-go.mod
-go.sum
-vendor/
-
 # Go output binaries/libraries
-/gocron
-/gocron-node
-/gocron-package
-/gocron-node-package
-bin/
+gocron
 
-node_modules
 
 

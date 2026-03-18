@@ -1,7 +1,13 @@
 <template>
   <el-container>
     <el-main>
-      <el-form ref="form" :model="form" :rules="formRules" label-width="100px" style="width: 700px;">
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="formRules"
+        label-width="100px"
+        style="width: 700px"
+      >
         <h3>数据库配置</h3>
         <el-form-item label="数据库选择" prop="db_type">
           <el-select v-model.trim="form.db_type" @change="update_port">
@@ -9,7 +15,8 @@
               v-for="item in dbList"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
@@ -40,7 +47,10 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="数据库名称" prop="db_name">
-              <el-input v-model="form.db_name" placeholder="如果数据库不存在, 需提前创建"></el-input>
+              <el-input
+                v-model="form.db_name"
+                placeholder="如果数据库不存在, 需提前创建"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -65,12 +75,18 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="密码" prop="admin_password">
-              <el-input v-model="form.admin_password" type="password"></el-input>
+              <el-input
+                v-model="form.admin_password"
+                type="password"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="确认密码" prop="confirm_admin_password">
-              <el-input v-model="form.confirm_admin_password" type="password"></el-input>
+              <el-input
+                v-model="form.confirm_admin_password"
+                type="password"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -83,94 +99,102 @@
 </template>
 
 <script>
-import installService from '../../api/install'
+import installService from "../../api/install";
 export default {
-  name: 'index',
-  data () {
+  name: "index",
+  data() {
     return {
       form: {
-        db_type: 'mysql',
-        db_host: '127.0.0.1',
-        db_port: 3306,
-        db_username: '',
-        db_password: '',
-        db_name: '',
-        db_table_prefix: '',
-        admin_username: '',
-        admin_password: '',
-        confirm_admin_password: '',
-        admin_email: ''
+        db_type: "postgres",
+        db_host: "127.0.0.1",
+        db_port: 5432,
+        db_username: "",
+        db_password: "",
+        db_name: "",
+        db_table_prefix: "",
+        admin_username: "",
+        admin_password: "",
+        confirm_admin_password: "",
+        admin_email: "",
       },
       formRules: {
-        db_type: [
-          {required: true, message: '请选择数据库', trigger: 'blur'}
-        ],
+        db_type: [{ required: true, message: "请选择数据库", trigger: "blur" }],
         db_host: [
-          {required: true, message: '请输入数据库主机名', trigger: 'blur'}
+          { required: true, message: "请输入数据库主机名", trigger: "blur" },
         ],
         db_port: [
-          {type: 'number', required: true, message: '请输入数据库端口', trigger: 'blur'}
+          {
+            type: "number",
+            required: true,
+            message: "请输入数据库端口",
+            trigger: "blur",
+          },
         ],
         db_username: [
-          {required: true, message: '请输入数据库用户名', trigger: 'blur'}
+          { required: true, message: "请输入数据库用户名", trigger: "blur" },
         ],
         db_password: [
-          {required: true, message: '请输入数据库密码', trigger: 'blur'}
+          { required: true, message: "请输入数据库密码", trigger: "blur" },
         ],
         db_name: [
-          {required: true, message: '请输入数据库名称', trigger: 'blur'}
+          { required: true, message: "请输入数据库名称", trigger: "blur" },
         ],
         admin_username: [
-          {required: true, message: '请输入管理员账号', trigger: 'blur'}
+          { required: true, message: "请输入管理员账号", trigger: "blur" },
         ],
         admin_email: [
-          {type: 'email', required: true, message: '请输入管理员邮箱', trigger: 'blur'}
+          {
+            type: "email",
+            required: true,
+            message: "请输入管理员邮箱",
+            trigger: "blur",
+          },
         ],
         admin_password: [
-          {required: true, message: '请输入管理员密码', trigger: 'blur'},
-          {min: 6, message: '长度至少6个字符', trigger: 'blur'}
+          { required: true, message: "请输入管理员密码", trigger: "blur" },
+          { min: 6, message: "长度至少6个字符", trigger: "blur" },
         ],
         confirm_admin_password: [
-          {required: true, message: '请再次输入管理员密码', trigger: 'blur'},
-          {min: 6, message: '长度至少6个字符', trigger: 'blur'}
-        ]
+          { required: true, message: "请再次输入管理员密码", trigger: "blur" },
+          { min: 6, message: "长度至少6个字符", trigger: "blur" },
+        ],
       },
       dbList: [
         {
-          value: 'mysql',
-          label: 'MySQL'
+          value: "postgres",
+          label: "PostgreSql",
         },
         {
-          value: 'postgres',
-          label: 'PostgreSql'
-        }
+          value: "mysql",
+          label: "MySQL",
+        },
       ],
       default_ports: {
-        'mysql': 3306,
-        'postgres': 5432
-      }
-    }
+        mysql: 3306,
+        postgres: 5432,
+      },
+    };
   },
   methods: {
-    update_port (dbType) {
-      console.log(dbType)
-      console.log(this.default_ports[dbType])
-      this.form['db_port'] = this.default_ports[dbType]
-      console.log(this.form['db_port'])
+    update_port(dbType) {
+      console.log(dbType);
+      console.log(this.default_ports[dbType]);
+      this.form.db_port = this.default_ports[dbType];
+      console.log(this.form.db_port);
     },
-    submit () {
-      this.$refs['form'].validate((valid) => {
+    submit() {
+      this.$refs.form.validate((valid) => {
         if (!valid) {
-          return false
+          return false;
         }
-        this.save()
-      })
+        this.save();
+      });
     },
-    save () {
+    save() {
       installService.store(this.form, () => {
-        this.$router.push('/')
-      })
-    }
-  }
-}
+        this.$router.push("/");
+      });
+    },
+  },
+};
 </script>

@@ -32,24 +32,24 @@
           <el-button type="primary" @click="search()">搜索</el-button>
         </el-form-item>
       </el-form>
-      <el-row type="flex" justify="end">
-        <el-col :span="3">
-          <el-button type="danger" v-if="this.$store.getters.user.isAdmin" @click="clearLog">清空日志</el-button>
+      <el-row type="flex" justify="space-between">
+        <el-col :span="18">
+          <el-pagination
+            background
+            layout="prev, pager, next, sizes, total"
+            :total="logTotal"
+            :page-size="20"
+            @size-change="changePageSize"
+            @current-change="changePage"
+            @prev-click="changePage"
+            @next-click="changePage">
+          </el-pagination>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="6" style="text-align: right;">
+          <el-button type="danger" v-if="this.$store.getters.user.isAdmin" @click="clearLog">清空日志</el-button>
           <el-button type="info" @click="refresh">刷新</el-button>
         </el-col>
       </el-row>
-      <el-pagination
-        background
-        layout="prev, pager, next, sizes, total"
-        :total="logTotal"
-        :page-size="20"
-        @size-change="changePageSize"
-        @current-change="changePage"
-        @prev-click="changePage"
-        @next-click="changePage">
-      </el-pagination>
       <el-table
         :data="logs"
         border
