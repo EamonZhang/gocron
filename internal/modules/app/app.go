@@ -32,19 +32,46 @@ var (
 	VersionId int // 版本号
 	// VersionFile 版本文件
 	VersionFile string // 版本号文件
+	// CommandLineConfigPath 从命令行参数传入的配置文件路径
+	CommandLineConfigPath string
+	// CommandLineLogPath 从命令行参数传入的日志文件路径
+	CommandLineLogPath string
 )
 
 // InitEnv 初始化
 func InitEnv(versionString string) {
 	logger.InitLogger()
-	var err error
-	AppDir, err = goutil.WorkDir()
-	if err != nil {
-		logger.Fatal(err)
+	
+	// 优先检查命令行参数传入的配置文件路径
+	configPath := CommandLineConfigPath
+	
+	if configPath != "" {
+		// 如果提供了命令行参数，使用该路径
+		AppDir = filepath.Dir(filepath.Dir(configPath)) // 父级目录为应用目录
+		ConfDir = filepath.Dir(configPath)
+		AppConfig = configPath
+	} else {
+		// 尝试从环境变量获取配置文件路径
+		configPath := os.Getenv("GOCRON_CONFIG_PATH")
+		
+		if configPath != "" {
+			// 如果提供了环境变量，优先使用环境变量中提供的路径
+			AppDir = filepath.Dir(filepath.Dir(configPath)) // 父级目录为应用目录
+			ConfDir = filepath.Dir(configPath)
+			AppConfig = configPath
+		} else {
+			// 默认行为：使用工作目录
+			var err error
+			AppDir, err = goutil.WorkDir()
+			if err != nil {
+				logger.Fatal(err)
+			}
+			ConfDir = filepath.Join(AppDir, "/conf")
+			AppConfig = filepath.Join(ConfDir, "/app.ini")
+		}
 	}
-	ConfDir = filepath.Join(AppDir, "/conf")
+	
 	LogDir = filepath.Join(AppDir, "/log")
-	AppConfig = filepath.Join(ConfDir, "/app.ini")
 	VersionFile = filepath.Join(ConfDir, "/.version")
 	createDirIfNotExists(ConfDir, LogDir)
 	Installed = IsInstalled()

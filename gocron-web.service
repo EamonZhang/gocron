@@ -1,0 +1,16 @@
+[Unit]
+Description=Gocron Web Service
+After=network.target
+
+[Service]
+Type=simple
+User=gocron
+Group=gocron
+ExecStart=/usr/local/bin/gocron web --conf.path /etc/gocron/conf/app.ini --log.path /var/log/gocron/cron.log -e prod
+WorkingDirectory=/etc/gocron
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

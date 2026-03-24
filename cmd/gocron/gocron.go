@@ -63,6 +63,16 @@ func getCommands() []cli.Command {
 				Value: "prod",
 				Usage: "runtime environment, dev|test|prod",
 			},
+			cli.StringFlag{
+				Name:  "conf.path",
+				Value: "",
+				Usage: "configuration file path",
+			},
+			cli.StringFlag{
+				Name:  "log.path",
+				Value: "",
+				Usage: "log file path",
+			},
 		},
 	}
 
@@ -72,6 +82,23 @@ func getCommands() []cli.Command {
 func runWeb(ctx *cli.Context) {
 	// 设置运行环境
 	setEnvironment(ctx)
+	
+	// 检查是否有指定的配置文件路径
+	if ctx.IsSet("conf.path") {
+		configPath := ctx.String("conf.path")
+		app.CommandLineConfigPath = configPath
+		logger.CommandConfigPath = configPath  // 也设置logger模块中的配置路径变量
+	}
+	
+	// 设置指定的日志路径（如果有指定的话）
+	if ctx.IsSet("log.path") {
+		logPath := ctx.String("log.path")
+		app.CommandLineLogPath = logPath
+		logger.CommandLogPath = logPath  // 设置logger模块中的日志路径变量
+	}
+	
+	// 先初始化日志
+	logger.InitLogger()
 	// 初始化应用
 	app.InitEnv(AppVersion)
 	// 初始化模块 DB、定时任务等

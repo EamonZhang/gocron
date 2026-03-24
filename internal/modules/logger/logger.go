@@ -3,10 +3,17 @@ package logger
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 
 	"github.com/cihub/seelog"
 	"gopkg.in/macaron.v1"
+)
+
+// 全局变量来存储配置和日志路径参数
+var (
+	CommandLogPath string
+	CommandConfigPath string
 )
 
 // 日志库
@@ -79,6 +86,15 @@ func Fatalf(format string, v ...interface{}) {
 }
 
 func write(level Level, v ...interface{}) {
+	if logger == nil {
+		// 如果logger尚未初始化，直接打印到标准错误
+		fmt.Fprintf(os.Stderr, "Logger not initialized yet: %v\n", v)
+		if level == FATAL {
+			os.Exit(1)
+		}
+		return
+	}
+	
 	defer logger.Flush()
 
 	content := ""
@@ -105,6 +121,15 @@ func write(level Level, v ...interface{}) {
 }
 
 func writef(level Level, format string, v ...interface{}) {
+	if logger == nil {
+		// 如果logger尚未初始化，直接打印到标准错误
+		fmt.Fprintf(os.Stderr, "Logger not initialized yet: %s %v\n", format, v)
+		if level == FATAL {
+			os.Exit(1)
+		}
+		return
+	}
+	
 	defer logger.Flush()
 
 	content := ""
@@ -133,12 +158,42 @@ func writef(level Level, format string, v ...interface{}) {
 }
 
 func getLogConfig() string {
+	var logPath string
+	
+	// 优先使用命令行参数指定的日志路径
+	if CommandLogPath != "" {
+		logPath = CommandLogPath
+	} else {
+		// 尝试从系统进程环境判断是否为系统服务
+		isSystemService := false
+		// 简单判断：当前用户为root或使用了系统配置路径，则认为是系统服务
+		if os.Getuid() == 0 || len(os.Getenv("GOCRON_CONFIG_PATH")) > 0 || CommandConfigPath != "" {
+			isSystemService = true
+		}
+
+		if isSystemService {
+			logPath = "/var/log/gocron/cron.log"
+		} else {
+			logPath = "log/cron.log"
+		}
+	}
+
+	// 确保日志目录存在
+	logDir := filepath.Dir(logPath)
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		fmt.Fprintf(os.Stderr, "创建日志目录失败: %v\n", err)
+		// 使用当前目录作为备用方案
+		logPath = "log/cron.log"
+		logDir = "log"
+		_ = os.MkdirAll(logDir, 0755)
+	}
+
 	config := `
     <seelog>
         <outputs formatid="main">
             %s
             <filter levels="info,critical,error,warn">
-                <file path="log/cron.log" />
+                <rollingfile type="date" filename="%s" datepattern="2006-01-02" maxrolls="7" />
             </filter>
         </outputs>
         <formats>
@@ -155,7 +210,8 @@ func getLogConfig() string {
             </filter>
          `
 	}
-	config = fmt.Sprintf(config, consoleConfig)
+
+	config = fmt.Sprintf(config, consoleConfig, logPath)
 
 	return config
 }

@@ -66,12 +66,14 @@ web/public/
 web/vue/docs/
 gocron-package
 gocron-node-package
-
+pkg
+rpmbuild/
 # Auto-generated statik files
 internal/statik/statik.go
 
 # Go output binaries/libraries
 gocron
+
 
 
 

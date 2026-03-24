@@ -85,8 +85,48 @@ statik:
 .PHONY: lint
 	golangci-lint run
 
+# 生成deb包 - gocron-web (仅web管理界面服务)
+.PHONY: deb-web
+deb-web: gocron
+	bash ./build-web-deb.sh $(version)
+
+# 生成deb包 - gocron-node (仅node执行服务)
+.PHONY: deb-node
+deb-node: node
+	bash ./build-node-deb.sh $(version)
+
+# 生成所有deb包 (web包 + node包)
+.PHONY: deb-all
+deb-all: build
+	bash ./build-web-deb.sh $(version)
+	bash ./build-node-deb.sh $(version)
+
+.PHONY: deb
+deb: deb-web
+
+# 生成RPM包 - gocron-web (仅web管理界面服务)
+.PHONY: rpm-web
+rpm-web: gocron
+	bash ./build-web-rpm.sh $(version)
+
+# 生成RPM包 - gocron-node (仅node执行服务)
+.PHONY: rpm-node
+rpm-node: node
+	bash ./build-node-rpm.sh $(version)
+
+# 生成所有RPM包 (web包 + node包)
+.PHONY: rpm-all
+rpm-all: build
+	bash ./build-web-rpm.sh $(version)
+	bash ./build-node-rpm.sh $(version)
+
+.PHONY: rpm
+rpm: rpm-web
+
 # 清理生成的可执行文件
 .PHONY: clean
 clean:
-	rm bin/gocron
-	rm bin/gocron-node
+	rm -f bin/gocron
+	rm -f bin/gocron-node
+	rm -rf pkg/
+	rm -rf web/public/*

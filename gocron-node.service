@@ -1,0 +1,18 @@
+[Unit]
+Description=Gocron Node Service
+After=network.target
+
+[Service]
+Type=simple
+User=gocron
+Group=gocron
+ExecStart=/usr/local/bin/gocron-node
+WorkingDirectory=/etc/gocron
+Restart=always
+RestartSec=10
+
+# 环境变量设置
+Environment=GOCRON_CONFIG_PATH=/etc/gocron/conf/
+
+[Install]
+WantedBy=multi-user.target
