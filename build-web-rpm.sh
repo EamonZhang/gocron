@@ -3,7 +3,7 @@
 set -e
 
 # Gocron Web RPM Package Builder
-VERSION=${1:-"1.6"}
+VERSION=${1:-"1.7"}
 ARCH="x86_64"
 RELEASE="1"
 PACKAGE_NAME="gocron-web-${VERSION}-${RELEASE}.${ARCH}"
@@ -30,6 +30,7 @@ fi
 
 # Copy systemd service files
 cp gocron-web.service "${BUILD_ROOT}/etc/systemd/system/"
+cp conf/app.ini "${BUILD_ROOT}/etc/gocron/conf/"
 
 # Create spec file
 cat > "${SPEC_DIR}/gocron-web.spec" << EOF

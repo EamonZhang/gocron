@@ -3,7 +3,7 @@
 set -e
 
 # Gocron Node Debian Package Builder
-VERSION=${1:-"1.6"}
+VERSION=${1:-"1.7"}
 ARCH="amd64"
 PACKAGE_NAME="gocron-node_${VERSION}_${ARCH}"
 
@@ -107,7 +107,5 @@ echo "Building Debian package..."
 dpkg-deb --build --root-owner-group "${PKG_DIR}"
 
 echo "Debian package built successfully: ${PACKAGE_NAME}.deb"
-cp "${PKG_DIR}.deb" ./
-ls -lh "${PACKAGE_NAME}.deb"
 
 echo "Done! The gocron-node Debian package is ready."

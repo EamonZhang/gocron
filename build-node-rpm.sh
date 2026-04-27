@@ -3,7 +3,7 @@
 set -e
 
 # Gocron Node RPM Package Builder
-VERSION=${1:-"1.6"}
+VERSION=${1:-"1.7"}
 ARCH="x86_64"
 RELEASE="1"
 PACKAGE_NAME="gocron-node-${VERSION}-${RELEASE}.${ARCH}"

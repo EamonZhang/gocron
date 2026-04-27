@@ -3,7 +3,7 @@
 set -e
 
 # Gocron Web Debian Package Builder
-VERSION=${1:-"1.6"}
+VERSION=${1:-"1.7"}
 ARCH="amd64"
 PACKAGE_NAME="gocron-web_${VERSION}_${ARCH}"
 
